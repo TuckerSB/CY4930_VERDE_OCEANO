@@ -15,7 +15,7 @@ services:
       args:
         ELK_VERSION: ${ELK_VERSION}
     volumes:
-      - setup:/state:Z
+      - elk-setup-vol:/state:Z
     environment:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
       LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
@@ -29,8 +29,8 @@ services:
       args:
         ELK_VERSION: ${ELK_VERSION}
     volumes:
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
-      - elasticsearch:/usr/share/elasticsearch/data:z
+      - elasticsearch-config-vol:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
+      - elasticsearch-vol:/usr/share/elasticsearch/data:z
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -52,8 +52,8 @@ services:
       args:
         ELK_VERSION: ${ELK_VERSION}
     volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - logstash-config-vol:/usr/share/logstash/config/logstash.yml:ro,Z
+      - logstash-pipe-vol:/usr/share/logstash/pipeline:ro,Z
     ports:
       - "5044:5044"
       - "5000:5000/tcp"
@@ -73,7 +73,7 @@ services:
       args:
         ELK_VERSION: ${ELK_VERSION}
     volumes:
-      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+      - kibana-config-vol:/usr/share/kibana/config/kibana.yml:ro,Z
     ports:
       - "5601:5601"
     environment:
@@ -88,5 +88,9 @@ networks:
     driver: bridge
 
 volumes:
-  setup:
-  elasticsearch:
+  elk-setup-vol:
+  elasticsearch-config-vol:
+  elasticsearch-vol:
+  logstash-config-vol:
+  logstash-vol:
+  kibana-config-vol:
