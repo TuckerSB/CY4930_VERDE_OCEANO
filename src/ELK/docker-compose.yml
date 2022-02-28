@@ -92,5 +92,5 @@ volumes:
   elasticsearch-config-vol:
   elasticsearch-vol:
   logstash-config-vol:
-  logstash-vol:
+  logstash-pipe-vol:
   kibana-config-vol:
