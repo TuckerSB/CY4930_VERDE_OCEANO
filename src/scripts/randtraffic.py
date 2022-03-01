@@ -1,5 +1,7 @@
 import random
 import requests
+import dns.resolver
+import mysql.connector
 
 def query_google():
     """
@@ -33,9 +35,44 @@ def query_reddit():
     query = query_template + random.choice(query_words)
     return requests.get(query)
 
+def query_dns():
+    """
+    TODO
+    """
+    resolver = dns.resolver.Resolver()
+    resolver.nameservers = ["3.214.123.0"]
+    answer = resolver.resolve("google.com")
+    return answer
+
+def query_web_server():
+    """
+    TODO
+    """
+    return requests.get("http://3.214.123.0:80")
+
+def query_mysql():
+    db = mysql.connector.connect(
+        host="3.214.123.0",
+        user="user",
+        password="pass"
+    )
+    cursor = db.cursor()
+    cursor.execute("SHOW DATABASES")
+    return [x for x in cursor]
+
 def main():
     query_google()
     query_reddit()
+    query_web_server()
+    try:
+        query_dns()
+    except:
+        pass
+    try:
+        query_mysql()
+    except:
+        pass
+
     # f = open("./temp/temp.html", "w+", encoding="utf-8")
     # f.write(resp.text)
 
