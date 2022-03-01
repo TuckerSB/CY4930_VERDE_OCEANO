@@ -1,13 +1,14 @@
 import argparse
 import numpy
 import os.path
+from PIL import Image
 
 # Sample run command: python3 .\randfile.py -p .\temp\
-# TODO ADD EXCEPTIONS TO FUNCTION DOCS
-# TODO ADD JPG AND PNG CREATION
 # TODO ADD FIND EXISTING FILES FUNCTION
+# TODO ADD CHOICE OF GS VS RGB IMG
 
-
+# DATA GENERATION
+###################################################################################################
 def rand_chars(n):
     """
     Generate a list of n non-special ascii-characters.
@@ -22,6 +23,20 @@ def rand_chars(n):
         characters.append(chr(ascii_numbers[i]))
     return characters
 
+def rand_pixels(cols, rows=1, color=True):
+    """
+    Returns a rows by cols list of pixels.
+    Input:
+        rows - The number of rows in the list of generated pixels. Defaults to 1.
+        cols - The number columns in the list of generated pixels.
+        color - Whether or not 3 values should be generated for rgb or one for grayscale. Defaults to True for rgb.
+    Output:
+        A rows by cols list of pixels for grayscale, cols * 3 for rgb.
+    """
+    return numpy.random.randint(255, size=(rows, cols, 3 if color else cols), dtype=numpy.uint8)
+
+# FILE ACTIONS
+###################################################################################################
 def get_unused_file_names(path, extension, number=1, name_num_min=10000, name_num_max=99999):
     """
     Generate a list of numeric file names not currently in use at a given path with a given extension.
@@ -33,6 +48,8 @@ def get_unused_file_names(path, extension, number=1, name_num_min=10000, name_nu
         name_num_max - The maximum number the name will be. Defaults to 99999.
     Output:
         The list of full file paths. Any path includes the given directory path, the generated file name, and the file extension.
+    Raise:
+        OverflowError - If there are not enough unique file names with an extension available in a directory between min and max.
     """
     names = []
     name_num = name_num_min
@@ -50,7 +67,7 @@ def get_unused_file_names(path, extension, number=1, name_num_min=10000, name_nu
         name_num = name_num + 1
     return names
 
-def create_file(args):
+def create_files(args):
     """
     Creates files using the specified arguments.
     Input:
@@ -58,6 +75,8 @@ def create_file(args):
     Ouput:
         Creates files.
         Returns nothing.
+    Raise:
+        Exception - If the extension requested is not implemented.
     """
     # Get file names
     names = get_unused_file_names(args["path"], args["extension"], number=args["number"])
@@ -69,15 +88,27 @@ def create_file(args):
             f = open(name, "x")
             for character in data:
                 f.write(character)
+        elif args["extension"] == "jpg" or args["extension"] == "png":
+            data = rand_pixels(rows=args["size"], cols=args["size"], color=True)
+            # Convert Pixels to image
+            image = Image.fromarray(data, mode="RGB")
+            # Write new file
+            image.save(name)
         else:
             raise Exception("Unimplemented extension specified")
     return
 
+# MAIN
+###################################################################################################
 def parse_args():
     """
     Parses the command line arguments.
     Output:
         The dictionary of parsed arguments.
+    Raise:
+        ValueError - If the path given is not a valid directory.
+        ValueError - If the number of files given is not >= 1.
+        ValueError - If the sie given is not >= 1.
     """
     # Define argument options
     ## Actions that need new data
@@ -124,13 +155,15 @@ def parse_args():
 
 def main():
     """
-    TODO
+    Performs the correct file action based on the command line arguments.
+    Raise:
+        Exception - If the mode requested is not implemented.
     """
     # Parse arguments
     args = parse_args()
     # Handle file action
     if args["mode"] == "create":
-        create_file(args)
+        create_files(args)
     else:
         raise Exception("Unimplemented mode specified")
     return
