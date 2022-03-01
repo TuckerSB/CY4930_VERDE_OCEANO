@@ -4,6 +4,9 @@ import os.path
 
 # Sample run command: python3 .\randfile.py -p .\temp\
 # TODO ADD EXCEPTIONS TO FUNCTION DOCS
+# TODO ADD JPG AND PNG CREATION
+# TODO ADD FIND EXISTING FILES FUNCTION
+
 
 def rand_chars(n):
     """
@@ -19,48 +22,55 @@ def rand_chars(n):
         characters.append(chr(ascii_numbers[i]))
     return characters
 
-def get_unused_file_name(path, extension, name_num_min=10000, name_num_max=99999):
+def get_unused_file_names(path, extension, number=1, name_num_min=10000, name_num_max=99999):
     """
-    Generate a numeric file name not currently in use at a given path with a given extension.
+    Generate a list of numeric file names not currently in use at a given path with a given extension.
     Input:
         path - The directory path for the file.
         extension - The extension spcifying file type.
+        number - The number of file names to get. Defaults to 1.
         name_num_min - The minimum number the name will be. Defaults to 10000.
         name_num_max - The maximum number the name will be. Defaults to 99999.
     Output:
-        The full file path. This includes the given directory path, the generated file name, and the file extension.
+        The list of full file paths. Any path includes the given directory path, the generated file name, and the file extension.
     """
+    names = []
     name_num = name_num_min
-    name = path + str(name_num) + "." + extension
-    # Generate file name that does not already exist
-    ## Increment if name is taken up to max
-    while(os.path.exists(name) and name_num <= name_num_max):
-        name_num = name_num + 1
+    for i in range(number):
         name = path + str(name_num) + "." + extension
-    if name_num == name_num_max + 1:
-        raise OverflowError("Can create no more files of the specified type in the specified path")
-    return name
+        # Generate file name that does not already exist
+        ## Increment if name is taken up to max
+        while(os.path.exists(name) and name_num <= name_num_max):
+            name_num = name_num + 1
+            name = path + str(name_num) + "." + extension
+        if name_num == name_num_max + 1:
+            raise OverflowError("Could not create number of files of specified type in the specified path")
+        # Add name to list
+        names.append(name)
+        name_num = name_num + 1
+    return names
 
 def create_file(args):
     """
-    Create a file using the specified arguments.
+    Creates files using the specified arguments.
     Input:
         args - The specified arguments.
     Ouput:
-        Creates a file.
+        Creates files.
         Returns nothing.
     """
-    # Get file name
-    name = get_unused_file_name(args["path"], args["extension"])
-    # Generate data and write file depending on extension
-    if args["extension"] == "txt":
-        data = rand_chars(100)
-        # Write new file
-        f = open(name, "x")
-        for character in data:
-            f.write(character)
-    else:
-        raise Exception("Unimplemented extension specified")
+    # Get file names
+    names = get_unused_file_names(args["path"], args["extension"], number=args["number"])
+    # Generate data and write files depending on extension
+    for name in names:
+        if args["extension"] == "txt":
+            data = rand_chars(args["size"])
+            # Write new file
+            f = open(name, "x")
+            for character in data:
+                f.write(character)
+        else:
+            raise Exception("Unimplemented extension specified")
     return
 
 def parse_args():
