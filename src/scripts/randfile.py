@@ -1,14 +1,11 @@
 import argparse
-from logging import exception
-from tkinter import EXCEPTION
 import numpy
-import os.path
+import os
 from os import listdir
 from PIL import Image
+import shutil
 
 # Sample run command: python3 .\randfile.py -p .\temp\
-# TODO COPY, DELETE, SHRINK
-# TODO CARRY EXCEPTIONS UP FUNCTION DOCUMENTS? Single point of truth annoyance. Could say "exceptions of this sub function"
 
 # DATA GENERATION
 ###################################################################################################
@@ -53,19 +50,17 @@ def get_used_file_names(path, extension, number=1):
             files_of_type.append(path + file)
     if len(files_of_type) < number:
         raise ValueError("Files of the given type in the given path are less than desired number")
-    return files_of_type
+    return files_of_type[:number]
 
-# TODO COPY NAMES IMPLEMENTATION
-def get_unused_file_names(path, extension, number=1, name_num_min=10000, name_num_max=99999, copy=False):
+def get_unused_file_names(path, extension, number=1, name_num_min=10000, name_num_max=99999):
     """
     Generate a list of numeric file names not currently in use at a given path with a given extension.
     Input:
         path - The directory path for the file.
-        extension - The extension spcifying file type.
+        extension - The extension specifying file type.
         number - The number of file names to get. Defaults to 1.
         name_num_min - The minimum number the name will be. Defaults to 10000.
         name_num_max - The maximum number the name will be. Defaults to 99999.
-        copy - Whether or not the new names are for copied files. Defaults to False.
     Output:
         The list of full file paths. Any path includes the given directory path, the generated file name, and the file extension.
     Raise:
@@ -87,13 +82,32 @@ def get_unused_file_names(path, extension, number=1, name_num_min=10000, name_nu
         name_num = name_num + 1
     return names
 
+def get_copy_file_names(extension, names):
+    """
+    Generate a list of unused copy-of-file names.
+    Input:
+        extension - The extension specifying file type.
+        names - The names of files including paths to find copy names for.
+    Output:
+        Returns a list of copy names for each given name.
+    """
+    copy_names = []
+    for name in names:
+        i = 1
+        copy_name = name[:len(name) - len(extension) - 1] + "_C-" + str(i) + name[len(name) - len(extension) - 1:]
+        while os.path.exists(copy_name):
+            i = i + 1
+            copy_name = name[:len(name) - len(extension) - 1] + "_C-" + str(i) + name[len(name) - len(extension) - 1:]
+        copy_names.append(copy_name)
+    return copy_names
+
 def _write_files(args, names, write_open_method = "w"):
     """
     Write files with given names using a given method and specified arguments.
     Input:
         args - The specified arguments.
         names - The file names to write to.
-        write_open_method - The writing method specified for opening. Expects a, w, or x.
+        write_open_method - The writing method specified for opening. Expects a, w, x, or s. Option s is non-standard and shrinks the file
     Ouput:
         Writes files.
         Returns nothing.
@@ -106,7 +120,7 @@ def _write_files(args, names, write_open_method = "w"):
         if args["extension"] == "txt":
             # Generate data
             data = rand_chars(args["size"])
-            # Only overwrite first characters
+            # If overwrite, only overwrite first characters
             if write_open_method == "w":
                 f = open(name, "r")
                 old_data = list(f.read())
@@ -115,7 +129,13 @@ def _write_files(args, names, write_open_method = "w"):
                     for i in range(args["size"]):
                         old_data[i] = data[i]
                     data = old_data
-            # Write new file
+            # If shrink, only shrink to first number characters at most
+            elif write_open_method == "s":
+                f = open(name, "r")
+                old_data = list(f.read())
+                data = old_data[:args["size"]] if args["size"] < len(old_data) else old_data
+                write_open_method = "w"
+            # Write file
             f = open(name, write_open_method)
             for character in data:
                 f.write(character)
@@ -152,6 +172,19 @@ def _write_files(args, names, write_open_method = "w"):
                     for i in range(args["size"]):
                         for j in range(args["size"]):
                             old_data[i][j] = data[i][j]
+                    data = old_data
+            elif write_open_method == "s":
+                # Open existing image
+                image = Image.open(name)
+                # Convert image to array
+                old_data = numpy.array(image)
+                # Shrink to at most number by number pixels
+                if len(old_data) > args["size"]:
+                    data = []
+                    for i in range(args["size"]):
+                        data.append(old_data[i][:args["size"]])
+                    data = numpy.asarray(data)
+                else:
                     data = old_data
             elif write_open_method == "x":
                 # Generate data
@@ -194,6 +227,49 @@ def append_files(args):
     names = get_used_file_names(args["path"], args["extension"], number=args["number"])
     # Write with a to append
     _write_files(args, names, write_open_method="a")
+    return
+
+def copy_files(args):
+    """
+    TODO
+    """
+    # Get existing file names
+    names = get_used_file_names(args["path"], args["extension"], number=args["number"])
+    # Get copy file names
+    copy_names = get_copy_file_names(args["extension"], names)
+    # Copy the files
+    for i in range(args["number"]):
+        shutil.copyfile( names[i], copy_names[i])
+    return
+
+def delete_files(args):
+    """
+    TODO
+    """
+    # Get existing file names
+    names = get_used_file_names(args["path"], args["extension"], number=args["number"])
+    # Generate warning
+    warning = "Deleting these files,\n"
+    for name in names:
+        warning = warning + name + "\n"
+    warning = warning + "are you sure?(y/n)"
+    # Confirm delete
+    sure = " "
+    while sure not in "yYnN":
+        sure = input(warning)
+    # Delete files if sure, otherwise print cancelled
+    if sure in "yY":
+        for name in names:
+            os.remove(name)
+    else:
+        print("Cancelled delete")
+    return
+
+def shrink_files(args):
+    # Get existing file names
+    names = get_used_file_names(args["path"], args["extension"], number=args["number"])
+    # Write with s to shrink
+    _write_files(args, names, write_open_method="s")
     return
 
 # MAIN
@@ -266,6 +342,12 @@ def main():
         overwrite_files(args)
     elif args["mode"] == "append":
         append_files(args)
+    elif args["mode"] == "copy":
+        copy_files(args)
+    elif args["mode"] == "delete":
+        delete_files(args)
+    elif args["mode"] == "shrink":
+        shrink_files(args)
     else:
         raise Exception("Unimplemented mode specified")
     return
