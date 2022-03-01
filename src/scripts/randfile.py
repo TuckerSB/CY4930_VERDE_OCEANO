@@ -6,6 +6,7 @@ from PIL import Image
 import shutil
 
 # Sample run command: python3 .\randfile.py -p .\temp\
+# All images are assumed square
 
 # DATA GENERATION
 ###################################################################################################
@@ -39,7 +40,15 @@ def rand_pixels(cols, rows=1, color=True):
 ###################################################################################################
 def get_used_file_names(path, extension, number=1):
     """
-    TODO
+    Generate a list of file names that exist in the given directory path with a given extension.
+    Input:
+        path - The directory path.
+        extension - The file extension.
+        number - The number of file names to get.
+    Output:
+        A number long list of file names including path and extension.
+    Raise:
+        ValueError - If there are not the desired number of existing files in the path with the extension.
     """
     # Get all files in path
     files = [file for file in listdir(path) if os.path.isfile(path + file)]
@@ -201,7 +210,12 @@ def _write_files(args, names, write_open_method = "w"):
 
 def create_files(args):
     """
-    TODO
+    Creates files based on the command line arguments.
+    Input:
+        args - The command line arguments.
+    Output:
+        Creates files.
+        Returns nothing.
     """
     # Get new file names
     names = get_unused_file_names(args["path"], args["extension"], number=args["number"])
@@ -211,7 +225,13 @@ def create_files(args):
 
 def overwrite_files(args):
     """
-    TODO
+    Overwrites files based on the command line arguments.
+    Only overwrites part and keeps rest if overwrite size is less than existing file size.
+    Input:
+        args - The command line arguments.
+    Output:
+        Overwrites files.
+        Returns nothing.
     """
     # Get existing file names
     names = get_used_file_names(args["path"], args["extension"], number=args["number"])
@@ -221,7 +241,12 @@ def overwrite_files(args):
 
 def append_files(args):
     """
-    TODO
+    Appends to files based on the command line arguments.
+    Input:
+        args - The command line arguments.
+    Output:
+        Appends to files.
+        Returns nothing.
     """
     # Get existing file names
     names = get_used_file_names(args["path"], args["extension"], number=args["number"])
@@ -231,7 +256,12 @@ def append_files(args):
 
 def copy_files(args):
     """
-    TODO
+    Copies files based on the command line arguments.
+    Input:
+        args - The command line arguments.
+    Output:
+        Copies files.
+        Returns nothing.
     """
     # Get existing file names
     names = get_used_file_names(args["path"], args["extension"], number=args["number"])
@@ -244,7 +274,12 @@ def copy_files(args):
 
 def delete_files(args):
     """
-    TODO
+    Deletes files based on the command line arguments after prompting user for confirmation.
+    Input:
+        args - The command line arguments.
+    Output:
+        Deletes files.
+        Returns nothing.
     """
     # Get existing file names
     names = get_used_file_names(args["path"], args["extension"], number=args["number"])
@@ -266,6 +301,14 @@ def delete_files(args):
     return
 
 def shrink_files(args):
+    """
+    Shrinks files based on the command line arguments to no greater than the specified size.
+    Input:
+        args - The command line arguments.
+    Output:
+        Shrinks files.
+        Returns nothing.
+    """
     # Get existing file names
     names = get_used_file_names(args["path"], args["extension"], number=args["number"])
     # Write with s to shrink
