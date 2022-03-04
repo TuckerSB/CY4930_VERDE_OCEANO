@@ -1,0 +1,16 @@
+Replace log_setup.sh
+sudo docker exec container0 rm -rf /bash_scripts/log_setup.sh && sudo docker cp bash_scripts/log_setup.sh 14d2b31eb4c2:/bash_scripts/ && sudo docker exec -it container0 /bin/bash
+
+//Run log setup
+cd bash_scripts && chmod 777 log_setup.sh
+
+
+Replace osquery.conf
+sudo docker exec container0 rm -rf /bash_scripts/osquery.conf && sudo docker cp bash_scripts/osquery.conf 14d2b31eb4c2:/bash_scripts/ && sudo docker exec -it container0 /bin/bash
+
+
+Wipe the whole folder and replace
+sudo docker exec container0 rm -r /bash_scripts && sudo docker cp bash_scripts container0:/ && sudo docker exec -it container0 /bin/bash
+
+Start Rsyslog docker container for the first time:
+sudo docker run  --cap-add SYSLOG --restart always -v /var/log:/var/log -p 514:514 -p 514:514/udp --name rsyslog mysyslog
