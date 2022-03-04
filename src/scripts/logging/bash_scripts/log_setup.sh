@@ -20,6 +20,8 @@ add-apt-repository ppa:adiscon/v8-devel
 apt-get update
 apt-get install rsyslog
 cp rsyslog.conf /etc/
+cp rsyslog.d/50-default.conf /etc/rsyslog.d/
+cp rsyslog.d/60-osquery.conf /etc/rsyslog.d/
 chmod -R 764 /var/log
 rsyslogd
 
