@@ -1,0 +1,6 @@
+--disable_audit=false
+--audit_allow_config=true
+--audit_persist=true
+--audit_allow_process_events=true
+--config_path=/etc/osquery/osquery.conf
+--enable_syslog
