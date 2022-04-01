@@ -1,0 +1,131 @@
+version: "3.5"
+
+services:
+  webserver:
+    image: ubuntu/apache2
+    networks:
+      oceano-coporate:
+    container_name: WebServer
+    volumes:
+      - HTML_Data:/var/www/html
+      - ELK-Enrollment-Share:/home/enroll:ro
+    ports:
+      - "80:80"
+    restart: always
+    tty: true
+    stdin_open: true
+    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt & apache2-foreground"
+    
+  SQLserver:
+    image: ubuntu/mysql
+    networks:
+      oceano-coporate:
+    container_name: SQLServer
+    volumes:
+      - SQLData:/var/lib/mysql
+      - SQLConfig:/etc/mysql/mysql.conf.d/
+      - ELK-Enrollment-Share:/home/enroll:ro
+    ports:
+      - "3306:3306"
+    restart: always
+    tty: true
+    stdin_open: true
+    environment:
+      MYSQL_ROOT_PASSWORD: "TEMPROOT"
+      MYSQL_PASSWORD: "TEMPPASS"
+      MYSQL_USER: "verde"
+    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt & mysqld --user=root"
+      
+    
+  DNSServer:
+    image: ubuntu/bind9
+    networks:
+      oceano-coporate:
+        ipv4_address: 172.20.0.111
+    container_name: DNSServer
+    restart: always
+    tty: true
+    stdin_open: true
+    ports:
+      - "530:53"
+    command: bash -l -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt & /bin/bash"
+    volumes:
+      - ELK-Enrollment-Share:/home/enroll
+    
+    
+  Linux_Endpoint_1:
+    image: ubuntu
+    network_mode: bridge
+    container_name: LinuxEndpoint1
+    restart: always
+    tty: true
+    stdin_open: true
+    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    volumes:
+      - ELK-Enrollment-Share:/home/enroll:ro
+    
+  Linux_Endpoint_2:
+    image: ubuntu
+    network_mode: bridge
+    container_name: LinuxEndpoint2
+    restart: always
+    tty: true
+    stdin_open: true
+    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    volumes:
+      - ELK-Enrollment-Share:/home/enroll:ro
+    
+  Linux_Endpoint_3:
+    image: ubuntu
+    network_mode: bridge
+    container_name: LinuxEndpoint3
+    restart: always
+    tty: true
+    stdin_open: true
+    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    volumes:
+      - ELK-Enrollment-Share:/home/enroll:ro
+    
+  Linux_Endpoint_4:
+    image: ubuntu
+    network_mode: bridge
+    container_name: LinuxEndpoint4
+    restart: always
+    tty: true
+    stdin_open: true
+    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    volumes:
+      - ELK-Enrollment-Share:/home/enroll:ro
+
+  Linux_Endpoint_5:
+    image: ubuntu
+    network_mode: bridge
+    container_name: LinuxEndpoint5
+    restart: always
+    tty: true
+    stdin_open: true
+    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    volumes:
+      - ELK-Enrollment-Share:/home/enroll:ro
+
+    
+volumes:
+  HTML_Data:
+    external: true
+  SQLData:
+    external: true
+  SQLConfig:
+    external: true
+  DNSConfig:
+    external: true
+  DNSRecords:
+    external: true
+  DNSCache:
+    external: true
+  ELK-Enrollment-Share:
+    external: true
+    
+networks:
+  oceano-coporate:
+    external: true
+    name: oceano-coporate
