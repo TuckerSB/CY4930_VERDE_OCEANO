@@ -29,7 +29,7 @@ services:
       args:
         ELK_VERSION: ${ELK_VERSION}
     volumes:
-      - elasticsearch-config-vol:/usr/share/elasticsearch/config:ro,z
+      - elasticsearch-config-vol:/usr/share/elasticsearch/config:z
       - elasticsearch-vol:/usr/share/elasticsearch/data:z
     ports:
       - "9200:9200"
