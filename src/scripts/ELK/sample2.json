@@ -1,0 +1,14 @@
+{
+    "@timestamp":"2022-04-01T20:20:45.831Z", 
+    "log.level": "WARN", 
+    "message":"received plaintext http traffic on an https channel, closing connection Netty4HttpChannel{localAddress=/172.20.0.3:9200, remoteAddress=/172.20.0.2:58068}", 
+    "ecs.version": "1.2.0",
+    "service.name":"ES_ECS",
+    "event.dataset":"elasticsearch.server",
+    "process.thread.name":"elasticsearch[dc4985953cab][transport_worker][T#7]",
+    "log.logger":"org.elasticsearch.xpack.security.transport.netty4.SecurityNetty4HttpServerTransport",
+    "elasticsearch.cluster.uuid":"QAjSKbL-TWusM5UUVEHjsg",
+    "elasticsearch.node.id":"W3vCSmYdSiip36DHqcA9UQ",
+    "elasticsearch.node.name":"dc4985953cab",
+    "elasticsearch.cluster.name":"docker-cluster"
+}

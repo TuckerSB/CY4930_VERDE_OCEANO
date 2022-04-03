@@ -1,0 +1,14 @@
+{
+    "@timestamp":"2022-04-01T20:20:12.858Z", 
+    "log.level": "INFO", 
+    "message":"[.geoip_databases] creating index, cause [auto(bulk api)], templates [], shards [1]/[0]", 
+    "ecs.version": "1.2.0",
+    "service.name":"ES_ECS",
+    "event.dataset":"elasticsearch.server",
+    "process.thread.name":"elasticsearch[dc4985953cab][masterService#updateTask][T#1]",
+    "log.logger":"org.elasticsearch.cluster.metadata.MetadataCreateIndexService",
+    "elasticsearch.cluster.uuid":"QAjSKbL-TWusM5UUVEHjsg",
+    "elasticsearch.node.id":"W3vCSmYdSiip36DHqcA9UQ",
+    "elasticsearch.node.name":"dc4985953cab",
+    "elasticsearch.cluster.name":"docker-cluster"
+}
