@@ -5,10 +5,10 @@
 --host_identifier=instance
 --enroll_secret_path=/home/enroll/secret.txt
 --enroll_tls_endpoint=/api/v1/osquery/enroll
-# Configuration
---config_plugin=tls
---config_tls_endpoint=/api/v1/osquery/config
---config_refresh=10
+# Configuration REPLACED WITH WALKERS FLAGS
+# --config_plugin=tls
+# --config_tls_endpoint=/api/v1/osquery/config
+# --config_refresh=10
 # Live query
 --disable_distributed=false
 --distributed_plugin=tls
@@ -25,3 +25,10 @@
 --carver_start_endpoint=/api/v1/osquery/carve/begin
 --carver_continue_endpoint=/api/v1/osquery/carve/block
 --carver_block_size=2000000
+# Walkers Flags. Edited the config location to point to share
+--disable_audit=false
+--audit_allow_config=true
+--audit_persist=true
+--audit_allow_process_events=true
+--enable_syslog
+--config_path=/home/enroll/osquery.conf
