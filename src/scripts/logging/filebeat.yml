@@ -189,7 +189,7 @@ output.elasticsearch:
 # ------------------------------ Logstash Output -------------------------------
 #output.logstash:
   # The Logstash hosts - Needs to be changed to AWS Logstash address
-  hosts: ["172.20.0.4:5044"]
+  hosts: ["54.198.183.142:5044"]
   loadbalance: true
   ssl.enable: true
 
