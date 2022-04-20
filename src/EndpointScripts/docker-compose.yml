@@ -8,13 +8,13 @@ services:
     container_name: WebServer
     volumes:
       - HTML_Data:/var/www/html
-      - ELK-Enrollment-Share:/home/enroll:ro
+      - Enrollment_Share:/home/enroll:ro
     ports:
       - "80:80"
     restart: always
     tty: true
     stdin_open: true
-    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt & apache2-foreground"
+    command: bash -c "/home/enroll/filebeat filebeat -e -c /home/enroll/filebeat.yml & /home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt & apache2-foreground"
     
   SQLserver:
     image: ubuntu/mysql
@@ -24,7 +24,7 @@ services:
     volumes:
       - SQLData:/var/lib/mysql
       - SQLConfig:/etc/mysql/mysql.conf.d/
-      - ELK-Enrollment-Share:/home/enroll:ro
+      - Enrollment_Share:/home/enroll:ro
     ports:
       - "3306:3306"
     restart: always
@@ -34,7 +34,7 @@ services:
       MYSQL_ROOT_PASSWORD: "TEMPROOT"
       MYSQL_PASSWORD: "TEMPPASS"
       MYSQL_USER: "verde"
-    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt & mysqld --user=root"
+    command: bash -c "/home/enroll/filebeat filebeat -e -c /home/enroll/filebeat.yml & /home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt & mysqld --user=root"
       
     
   DNSServer:
@@ -48,9 +48,9 @@ services:
     stdin_open: true
     ports:
       - "530:53"
-    command: bash -l -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt & /bin/bash"
+    command: bash -l -c "/home/enroll/filebeat filebeat -e -c /home/enroll/filebeat.yml & /home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt & /bin/bash"
     volumes:
-      - ELK-Enrollment-Share:/home/enroll
+      - Enrollment_Share:/home/enroll
     
     
   Linux_Endpoint_1:
@@ -60,9 +60,9 @@ services:
     restart: always
     tty: true
     stdin_open: true
-    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    command: bash -c "/home/enroll/filebeat filebeat -e -c /home/enroll/filebeat.yml & /home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
     volumes:
-      - ELK-Enrollment-Share:/home/enroll:ro
+      - Enrollment_Share:/home/enroll:ro
     
   Linux_Endpoint_2:
     image: ubuntu
@@ -71,9 +71,9 @@ services:
     restart: always
     tty: true
     stdin_open: true
-    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    command: bash -c "/home/enroll/filebeat filebeat -e -c /home/enroll/filebeat.yml & /home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
     volumes:
-      - ELK-Enrollment-Share:/home/enroll:ro
+      - Enrollment_Share:/home/enroll:ro
     
   Linux_Endpoint_3:
     image: ubuntu
@@ -82,9 +82,9 @@ services:
     restart: always
     tty: true
     stdin_open: true
-    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    command: bash -c "/home/enroll/filebeat filebeat -e -c /home/enroll/filebeat.yml & /home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
     volumes:
-      - ELK-Enrollment-Share:/home/enroll:ro
+      - Enrollment_Share:/home/enroll:ro
     
   Linux_Endpoint_4:
     image: ubuntu
@@ -93,9 +93,9 @@ services:
     restart: always
     tty: true
     stdin_open: true
-    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    command: bash -c "/home/enroll/filebeat filebeat -e -c /home/enroll/filebeat.yml & /home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
     volumes:
-      - ELK-Enrollment-Share:/home/enroll:ro
+      - Enrollment_Share:/home/enroll:ro
 
   Linux_Endpoint_5:
     image: ubuntu
@@ -104,11 +104,10 @@ services:
     restart: always
     tty: true
     stdin_open: true
-    command: bash -c "/home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
+    command: bash -c "/home/enroll/filebeat filebeat -e -c /home/enroll/filebeat.yml & /home/enroll/osqueryd --flagfile=/home/enroll/flagfile.txt"
     volumes:
-      - ELK-Enrollment-Share:/home/enroll:ro
-
-    
+      - Enrollment_Share:/home/enroll:ro
+      
 volumes:
   HTML_Data:
     external: true
@@ -122,7 +121,7 @@ volumes:
     external: true
   DNSCache:
     external: true
-  ELK-Enrollment-Share:
+  Enrollment_Share:
     external: true
     
 networks:
