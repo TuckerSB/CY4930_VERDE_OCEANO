@@ -25,7 +25,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /var/log/*.log
+    #- /var/log/*.log
     - /var/log/osquery/osqueryd.results.log
 
     # Only use this for windows
@@ -176,7 +176,7 @@ setup.kibana:
 # Configure what output to use when sending the data collected by the beat.
 
 # ---------------------------- Elasticsearch Output ----------------------------
-output.elasticsearch:
+# output.elasticsearch:
   # Array of hosts to connect to.
   #hosts: ["localhost:9200"]
 
@@ -189,7 +189,7 @@ output.elasticsearch:
   #password: "changeme"
 
 # ------------------------------ Logstash Output -------------------------------
-#output.logstash:
+output.logstash:
   # The Logstash hosts - Needs to be changed to AWS Logstash address
   hosts: ["54.198.183.142:5044"]
   loadbalance: true
