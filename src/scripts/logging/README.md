@@ -10,11 +10,6 @@ as trouble retrieving kernel files from a docker container.
 - Make the script `log_setup_linux.sh` executable and run with `./log_setup_linux.sh`
 - Ensure the logstash output "hosts" IP in filebeat.yml is correctly pointing at the logstash container
 
-### Install Filebeat on Mac
-- Copy the bash_scripts folder onto the Mac machine
-- Make the script `log_setup_mac.sh` executable and run with `./log_setup_mac.sh`
-- Similarly, ensure that the logstash output "hosts" IP in filebeat.yml is correctly pointing at the logstash container
-
 ### Install Filebeat on Windows
 - Install Filebeat manually through the Elastic website. Sadly, there is no other option for installing filebeat on windows
 - Copy the filebeat.yml file to the installation of filebeat's data folder, typically: `C:ProgramData\Elastic\Beats\filebeat`
