@@ -17,7 +17,7 @@ as trouble retrieving kernel files from a docker container.
 - Uncomment line 32: `- "c:\program files\osquery\log\osqueryd.results.log"` in the filebeat.yml configuration
 - Comment out line 28 and 29 in filebeat.yml
 
-### Running filebeat on Linux and Mac
+### Running filebeat on Linux
 - Filebeat service starts when the log_setup_*.sh file is run on Mac or Linux.
 - This is done automatically when the Oceano stack starts in portainer
 
