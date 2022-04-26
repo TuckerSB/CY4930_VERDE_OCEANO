@@ -1,0 +1,2 @@
+# Syn Flood Detection Script
+This simple bash script provides the log file for filebeat that will be used to detect the syn flooding attack. It loops indefinitely with a one minute sleep timer, updating the log file with the number of open SYN_RECV connections on the host machine. This number is indicative of the amount of open connections that have not received an ACK for their response to the SYN. It is provided by filtering the output of netstat until all that is remaining is the integer value, substituting a zero if no connections are present.
