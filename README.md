@@ -26,7 +26,7 @@
     - ELK - The ELK stack code and configurations running s the logging solution
     - EndpointScripts - Scripts for enrolling endpoints with FleetDM
     - scripts - Scripts for generating and detecting activity
-        - Attacks - Ransomware and Syn Flood activity scripts
+        - Attacks - Ransomware, Registry Editing and Syn Flood activity scripts
         - ELK - Early sample JSON logs and their mapping
         - file_events - Scripts for generating random file events and simple web traffic in bulk
         - logging - Scripts for filebeat setup and Syn Flood detection
