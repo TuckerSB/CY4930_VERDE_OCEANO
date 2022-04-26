@@ -1,5 +1,5 @@
 # Random File and Network traffic event scritps
 ## randfile.py
-This program allows the user to specify a file type, action, and amount of files to facilitate the bulk manipulation of sample files. It is intended to be run on the endpoints.
+This program allows the user to specify a file type, action, and amount of files to facilitate the bulk manipulation of sample files. It is intended to be run on the endpoints. It has six main functions: Create, Append, Overwrite, Shrink, Delete, and Copy. A user of the script is expected to provide the path to a folder that this program can safely manipulate files within followed by which function to perform, the number of files to perform it on, the size of the data (how much to generate and add or overwrite, or trim) and what file type (limited to txt, png, and jpg). The program will then generate or find file names with the appropriate type and perform the desired actions with a single command. 
 ## randtraffic.py
 This program allows the user to generate network traffic to "random" google and reddit searches as well traffic to the project DNS, web, and MySQL servers. The randomness is limited to prevent unsavory results. These are intended to be run on the endpoints.
