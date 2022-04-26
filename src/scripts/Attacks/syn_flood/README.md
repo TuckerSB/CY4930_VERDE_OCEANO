@@ -1,0 +1,2 @@
+# Syn Flood Attack Script
+This program allows the user to perform a syn flood by specifying an IP and a port. There are optional inputs for the size of random data added to the SYN packet, whether or not to randomize the source IP address, and whether or not to loop the sending until cancelled. The randomization option allows unsecure networks to make use of spoofing while allowing more secure networks that do not allow outgoing spoofed traffic to still attempt a lesser version of the attack.
