@@ -24,6 +24,7 @@
 ## Files
 - src - All project files
     - ELK - The ELK stack code and configurations running s the logging solution
+        - /logstash/pipeline/logstash.conf - The Logstash configuration 
     - EndpointScripts - Scripts for enrolling endpoints with FleetDM
     - scripts - Scripts for generating and detecting activity
         - Attacks - Ransomware, Registry Editing, and Syn Flood activity scripts
