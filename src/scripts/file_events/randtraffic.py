@@ -37,7 +37,7 @@ def query_reddit():
 
 def query_dns():
     """
-    TODO
+    Request the project DNS resolve google's URL.
     """
     resolver = dns.resolver.Resolver()
     resolver.nameservers = ["3.214.123.0"]
@@ -46,11 +46,14 @@ def query_dns():
 
 def query_web_server():
     """
-    TODO
+    Request the project web server page.
     """
     return requests.get("http://3.214.123.0:80")
 
 def query_mysql():
+    """
+    Request the databases from the project SQL server.
+    """
     db = mysql.connector.connect(
         host="3.214.123.0",
         user="user",
